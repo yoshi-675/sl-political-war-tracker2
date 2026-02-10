@@ -2,18 +2,21 @@ import os
 import json
 import feedparser
 import google.generativeai as genai
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
-import random
 
-# 1. API Key Check
+# 1. API Setup
 if "GEMINI_API_KEY" not in os.environ:
     print("Error: GEMINI_API_KEY not found.")
     exit(1)
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-# 2. News Sources
+# 2. File Paths
+HISTORY_FILE = 'data/history.json'
+CURRENT_FILE = 'data/political_data.json'
+
+# 3. News Sources
 rss_urls = [
     "http://www.adaderana.lk/rss.php",
     "https://www.dailymirror.lk/RSS_Feeds/breaking-news",
@@ -21,135 +24,128 @@ rss_urls = [
     "https://colombogazette.com/feed/"
 ]
 
-def get_intel():
-    print("📡 Fetching News...")
+def get_news():
+    print("📡 Fetching Today's News...")
     combined_text = ""
-    raw_items = []
-    
     for url in rss_urls:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries[:5]: # Top 5 per site
-                title = entry.title.replace('"', "'").strip()
-                source = url.split('.')[1].title()
-                if "adaderana" in url: source = "AdaDerana"
-                
-                combined_text += f"- [{source}] {title}\n"
-                
-                raw_items.append({
-                    "title": title,
-                    "source": source,
-                    "link": getattr(entry, 'link', '#'),
-                    "pubDate": getattr(entry, 'published', '')
-                })
+            for entry in feed.entries[:5]:
+                combined_text += f"- {entry.title}\n"
         except:
             continue
-    return combined_text, raw_items
+    return combined_text
 
-def analyze_battlefield(news_text):
-    print("🧠 AI Analysis...")
+def generate_past_history():
+    print("📜 History file missing. Asking AI to reconstruct past data (Sep 2024 - Today)...")
+    
+    prompt = """
+    You are a political data archivist. 
+    Create a JSON dataset of Sri Lanka's political stability trend from September 23, 2024 (Anura Kumara's victory) to TODAY.
+    
+    Select key dates/events (approx 1 entry per 2 weeks + major events).
+    
+    Return a JSON ARRAY of objects. Schema:
+    [
+        {
+            "date": "YYYY-MM-DD",
+            "event": "Short Event Name (e.g., IMF Approval, Budget 2025)",
+            "gap_score": (float 1.0-10.0, rising means dissatisfaction),
+            "intensity": (float 1.0-10.0),
+            "dominant_player": "Anura" or "Dilith" or "Sajith" or "Namal"
+        },
+        ...
+    ]
+    Make the data realistic based on actual Sri Lankan history.
+    """
+    
+    model = genai.GenerativeModel('gemini-2.0-flash')
+    response = model.generate_content(prompt)
+    try:
+        return json.loads(response.text.replace('```json', '').replace('```', '').strip())
+    except:
+        return []
+
+def analyze_today(news_text):
+    print("🧠 Analyzing Today's Situation...")
+    
     prompt = f"""
-    Analyze the Sri Lanka political situation based on these headlines.
-    
-    PLAYERS & THEIR KEYWORDS (Count these!):
-    1. ANURA: Anura, NPP, JVP, President, Government, AKD, Dissanayake
-    2. DILITH: Dilith, MJP, Sarvajana, Star, Jayaweera, Mawbima
-    3. SAJITH: Sajith, SJB, Opposition, Premadasa, Samagi
-    4. NAMAL: Namal, SLPP, Pohottuwa, Rajapaksa, Mahinda
-    5. RANIL: Ranil, UNP, Wickremesinghe, Ex-President
-
-    HEADLINES:
+    Analyze today's news headlines in Sri Lanka:
     {news_text}
-
-    TASK:
-    Generate a JSON object exactly matching the schema below.
-    IMPORTANT: Even if specific news is missing, ESTIMATE values based on general context. DO NOT LEAVE ZEROS unless absolutely silent.
     
-    JSON SCHEMA:
+    1. Generate current status JSON (Player stats, etc).
+    2. Generate a single history entry object for TODAY.
+    
+    Output JSON Schema:
     {{
-        "war_status": {{
-            "intensity": (float 0.0-10.0), "alert_status": "GREEN/ORANGE/RED", 
-            "dominant_player": "Name", "crisis_level": "Stable/Volatile"
+        "dashboard_data": {{
+             "war_status": {{ "intensity": (float), "alert_status": "TEXT", "dominant_player": "TEXT" }},
+             "player_stats": {{ "anura": {{ "media_share": (int), "sentiment": (float) }}, ...other players... }},
+             "gap_scores": {{ "anura": (float), ...others... }}
         }},
-        "player_stats": {{
-            "anura": {{ "media_share": (int %), "sentiment_score": (float -1 to 1), "mentions": (int), "attack_ratio": (float 0-1), "defense_ratio": (float 0-1) }},
-            "dilith": {{ "media_share": (int %), "sentiment_score": (float), "mentions": (int), "attack_ratio": (float), "defense_ratio": (float) }},
-            "sajith": {{ "media_share": (int %), "sentiment_score": (float), "mentions": (int), "attack_ratio": (float), "defense_ratio": (float) }},
-            "namal": {{ "media_share": (int %), "sentiment_score": (float), "mentions": (int), "attack_ratio": (float), "defense_ratio": (float) }},
-            "ranil": {{ "media_share": (int %), "sentiment_score": (float), "mentions": (int), "attack_ratio": (float), "defense_ratio": (float) }}
-        }},
-        "gap_scores": {{ "anura": (float 0-10), "dilith": (float), "sajith": (float), "namal": (float), "ranil": (float) }},
-        "fear_levels": {{ "anura": (float 0-1), "dilith": (float), "sajith": (float), "namal": (float), "ranil": (float) }},
-        "war_dynamics": {{
-             "anura": {{ "dilith": (int), "sajith": (int), "namal": (int), "ranil": (int) }},
-             "dilith": {{ "anura": (int), "sajith": (int), "namal": (int), "ranil": (int) }},
-             "sajith": {{ "anura": (int), "dilith": (int), "namal": (int), "ranil": (int) }},
-             "namal": {{ "anura": (int), "dilith": (int), "sajith": (int), "ranil": (int) }},
-             "ranil": {{ "anura": (int), "dilith": (int), "sajith": (int), "namal": (int) }}
-        }},
-        "ai_predictions": {{
-            "anura": {{ "move": "Text", "confidence": (float), "timing": "24h" }},
-            "dilith": {{ "move": "Text", "confidence": (float), "timing": "24h" }},
-            "sajith": {{ "move": "Text", "confidence": (float), "timing": "24h" }},
-            "namal": {{ "move": "Text", "confidence": (float), "timing": "24h" }},
-            "ranil": {{ "move": "Text", "confidence": (float), "timing": "24h" }},
-            "coalition": {{ "formation_probability": (float), "likely_leader": "Name" }},
-            "crisis_risk": {{ "probability": (int), "timeline": "text", "triggers": ["text"] }}
+        "history_entry": {{
+            "date": "TODAY_DATE",
+            "event": "Main Headline Topic",
+            "gap_score": (float),
+            "intensity": (float),
+            "dominant_player": "Name"
         }}
     }}
+    Use estimated data if news is scarce. No zeros.
     """
     
     model = genai.GenerativeModel('gemini-2.0-flash')
     response = model.generate_content(prompt)
     return json.loads(response.text.replace('```json', '').replace('```', '').strip())
 
-# 3. Execution
+# --- MAIN EXECUTION ---
 try:
-    news_text, raw_news = get_intel()
-    if not news_text: 
-        print("No news found")
-        exit()
-        
-    data = analyze_battlefield(news_text)
-    
-    # Metadata
-    tz = pytz.timezone('Asia/Colombo')
-    data['metadata'] = { "generated_at": datetime.now(tz).isoformat(), "unique_articles": len(raw_news) }
-    
-    # ADVANCED KEYWORD MATCHING FOR HEADLINES
-    processed_headlines = []
-    keywords = {
-        'anura': ['anura', 'npp', 'jvp', 'president', 'dissanayake', 'govt', 'government'],
-        'dilith': ['dilith', 'mjp', 'sarvajana', 'jayaweera', 'star'],
-        'sajith': ['sajith', 'sjb', 'opposition', 'premadasa', 'samagi'],
-        'namal': ['namal', 'slpp', 'pohottuwa', 'rajapaksa', 'mahinda'],
-        'ranil': ['ranil', 'unp', 'wickremesinghe', 'ex-president']
-    }
-    
-    for item in raw_news:
-        mentions = {}
-        title_lower = item['title'].lower()
-        for p, keys in keywords.items():
-            mentions[p] = any(k in title_lower for k in keys)
-            
-        sentiment = 'neutral'
-        if any(x in title_lower for x in ['crash', 'crisis', 'fail', 'protest', 'warn']): sentiment = 'negative'
-        if any(x in title_lower for x in ['win', 'success', 'record', 'agree']): sentiment = 'positive'
-
-        processed_headlines.append({
-            "title": item['title'],
-            "source": item['source'],
-            "language": "en",
-            "sentiment": sentiment,
-            "mentions": mentions
-        })
-    
-    data['recent_headlines'] = processed_headlines
-
     os.makedirs('data', exist_ok=True)
-    with open('data/political_data.json', 'w') as f:
-        json.dump(data, f, indent=4)
-    print("✅ Intelligence Updated.")
+    
+    # Step 1: Handle History (Memory)
+    if os.path.exists(HISTORY_FILE):
+        print("📂 Loading existing history...")
+        with open(HISTORY_FILE, 'r') as f:
+            history = json.load(f)
+    else:
+        # If no file exists, AI generates the timeline from 2024 Sep
+        history = generate_past_history()
+    
+    # Step 2: Analyze Today
+    news_text = get_news()
+    if not news_text: news_text = "No major news. Assume stable situation."
+    
+    analysis = analyze_today(news_text)
+    
+    # Step 3: Update History
+    # Set today's date
+    tz = pytz.timezone('Asia/Colombo')
+    today_str = datetime.now(tz).strftime("%Y-%m-%d")
+    
+    # Check if today already exists to avoid duplicates
+    if not any(d['date'] == today_str for d in history):
+        today_entry = analysis['history_entry']
+        today_entry['date'] = today_str # Ensure date is correct
+        history.append(today_entry)
+        print(f"➕ Added entry for {today_str}")
+    
+    # Keep only last 60 entries to save space
+    if len(history) > 60: history = history[-60:]
+    
+    # Step 4: Inject History into Dashboard Data
+    # We send the history array to the frontend so it can draw charts
+    final_data = analysis['dashboard_data']
+    final_data['history_trend'] = history
+    final_data['metadata'] = { "generated_at": datetime.now(tz).isoformat() }
+
+    # Step 5: Save Files
+    with open(HISTORY_FILE, 'w') as f:
+        json.dump(history, f, indent=4)
+        
+    with open(CURRENT_FILE, 'w') as f:
+        json.dump(final_data, f, indent=4)
+        
+    print("✅ Intelligence & History Updated Successfully!")
 
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"❌ Error: {e}")
