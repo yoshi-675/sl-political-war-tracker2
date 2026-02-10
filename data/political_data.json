@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "generated_at": "2026-02-10T07:44:33.917092",
+    "articles_scraped": 3,
+    "unique_articles": 2,
+    "sources_used": 5,
+    "scraping_duration": "completed"
+  },
+  "war_status": {
+    "intensity": 2.5,
+    "dominant_player": "none",
+    "total_mentions": 0,
+    "crisis_level": "LOW",
+    "alert_status": "YELLOW"
+  },
+  "player_stats": {
+    "anura": {
+      "mentions": 0,
+      "positive": 0,
+      "negative": 0,
+      "neutral": 0,
+      "crisis_exposure": 0,
+      "headlines": [],
+      "sentiment_score": 0,
+      "attack_count": 0,
+      "defense_count": 0,
+      "media_share": 0,
+      "attack_ratio": 0,
+      "defense_ratio": 0
+    },
+    "dilith": {
+      "mentions": 0,
+      "positive": 0,
+      "negative": 0,
+      "neutral": 0,
+      "crisis_exposure": 0,
+      "headlines": [],
+      "sentiment_score": 0,
+      "attack_count": 0,
+      "defense_count": 0,
+      "media_share": 0,
+      "attack_ratio": 0,
+      "defense_ratio": 0
+    },
+    "sajith": {
+      "mentions": 0,
+      "positive": 0,
+      "negative": 0,
+      "neutral": 0,
+      "crisis_exposure": 0,
+      "headlines": [],
+      "sentiment_score": 0,
+      "attack_count": 0,
+      "defense_count": 0,
+      "media_share": 0,
+      "attack_ratio": 0,
+      "defense_ratio": 0
+    },
+    "namal": {
+      "mentions": 0,
+      "positive": 0,
+      "negative": 0,
+      "neutral": 0,
+      "crisis_exposure": 0,
+      "headlines": [],
+      "sentiment_score": 0,
+      "attack_count": 0,
+      "defense_count": 0,
+      "media_share": 0,
+      "attack_ratio": 0,
+      "defense_ratio": 0
+    },
+    "ranil": {
+      "mentions": 0,
+      "positive": 0,
+      "negative": 0,
+      "neutral": 0,
+      "crisis_exposure": 0,
+      "headlines": [],
+      "sentiment_score": 0,
+      "attack_count": 0,
+      "defense_count": 0,
+      "media_share": 0,
+      "attack_ratio": 0,
+      "defense_ratio": 0
+    }
+  },
+  "gap_scores": {
+    "anura": 5.0,
+    "dilith": 5.0,
+    "sajith": 5.0,
+    "namal": 5.0,
+    "ranil": 5.0
+  },
+  "fear_levels": {
+    "anura": 0.5,
+    "dilith": 0.5,
+    "sajith": 0.5,
+    "namal": 0.5,
+    "ranil": 0.5
+  },
+  "war_dynamics": {
+    "anura": {
+      "dilith": 0,
+      "sajith": 0,
+      "namal": 0,
+      "ranil": 0
+    },
+    "dilith": {
+      "anura": 0,
+      "sajith": 0,
+      "namal": 0,
+      "ranil": 0
+    },
+    "sajith": {
+      "anura": 0,
+      "dilith": 0,
+      "namal": 0,
+      "ranil": 0
+    },
+    "namal": {
+      "anura": 0,
+      "dilith": 0,
+      "sajith": 0,
+      "ranil": 0
+    },
+    "ranil": {
+      "anura": 0,
+      "dilith": 0,
+      "sajith": 0,
+      "namal": 0
+    }
+  },
+  "ai_predictions": {
+    "anura": {
+      "move": "Continue IMF path, ignore opposition noise",
+      "confidence": 0.72,
+      "timing": "Ongoing",
+      "trigger": "Stable metrics",
+      "expected_outcome": "Gradual erosion if economy doesn't improve"
+    },
+    "dilith": {
+      "move": "Consolidate media gains, prepare for long game",
+      "confidence": 0.68,
+      "timing": "2-4 weeks",
+      "trigger": "Momentum building",
+      "expected_outcome": "Gradual narrative shift"
+    },
+    "coalition": {
+      "formation_probability": 0.42,
+      "timeline": "Uncertain",
+      "likely_leader": "none",
+      "obstacles": [
+        "Sajith-Namal rivalry",
+        "Dilith dominance fears",
+        "Anura divide-and-rule"
+      ]
+    },
+    "crisis_risk": {
+      "probability": 20.0,
+      "triggers": [
+        "US tariff shock",
+        "IMF review failure",
+        "Mass protest"
+      ],
+      "timeline": "90 days"
+    }
+  },
+  "recent_headlines": [
+    {
+      "title": "Most Viewed Video Stories",
+      "source": "adaderana-english",
+      "language": "en",
+      "mentions": {},
+      "sentiment": "neutral"
+    },
+    {
+      "title": "Trinco HC to consider bail plea of Balangoda Kassapa Thero over Buddha statue incident on Feb. 11 (English)",
+      "source": "adaderana-english",
+      "language": "en",
+      "mentions": {},
+      "sentiment": "neutral"
+    }
+  ]
+}
