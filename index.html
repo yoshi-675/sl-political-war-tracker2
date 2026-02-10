@@ -30,7 +30,7 @@
 
     <script>
         // Load news from your GitHub
-        fetch('https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker/main/data/news.json')
+        fetch('https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker2/main/data/news.json')
             .then(r => r.json())
             .then(data => {
                 const html = data.map(item => `<p>• ${item.title}</p>`).join('');
