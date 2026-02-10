@@ -1,34 +1,41 @@
-name: Scrape News
+name: Scrape News (Pentagon Intel)
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 */4 * * *' # සෑම පැය 4කට වරක්ම
+  workflow_dispatch:      # මැනුවල් Run කිරීමට
 
 permissions:
   contents: write
 
 jobs:
-  scrape:
+  scrape-and-analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
       
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
-      - name: Install packages
-        run: pip install requests beautifulsoup4
-      
-      - name: Run scraper
-        run: python scraper.py
-      
-      - name: Commit and push results
+          
+      - name: Install AI Dependencies
+        # මෙන්න මේ ටික තමයි අපේ අලුත් Script එකට ඕනේ
+        run: pip install google-generativeai feedparser pytz
+        
+      - name: Run Intelligence Script
+        # මෙතනින් තමයි scraper.py වෙනුවට update_intel.py රන් කරන්නේ
+        # ඒ වගේම Gemini API Key එකත් ලබා දෙනවා
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python update_intel.py
+        
+      - name: Commit and Push Results
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Update political data [$(date)]" || echo "No changes to commit"
+          git config --global user.name "PentagonBot"
+          git config --global user.email "bot@noreply.github.com"
+          # data ෆෝල්ඩරයේ වෙනස්කම් විතරක් යවමු
+          git add data/political_data.json
+          git commit -m "Auto-update: Pentagon Intelligence [$(date)]" || echo "No changes to commit"
           git push
