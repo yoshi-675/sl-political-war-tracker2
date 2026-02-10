@@ -33,8 +33,10 @@
         fetch('https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker2/main/data/news.json')
             .then(r => r.json())
             .then(data => {
-                const html = data.map(item => `<p>• ${item.title}</p>`).join('');
-                document.getElementById('news').innerHTML = html || 'No news yet';
+                const html = data.map(item => {
+    const flag = item.language === 'si' ? '🇱🇰' : '🇬🇧';
+    return `<div class="news-item">${flag} <strong>${item.source}</strong>: ${item.title}</div>`;
+}).join('');
             })
             .catch(() => {
                 document.getElementById('news').innerHTML = 'Run scraper first';
