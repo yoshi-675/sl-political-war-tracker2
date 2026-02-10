@@ -72,17 +72,6 @@
         .metric-card { transition: transform 0.2s; }
         .metric-card:hover { transform: translateY(-2px); }
         
-        .fear-bar { transition: width 1s ease; }
-        .gap-bar { transition: width 1s ease; }
-        
-        .prediction-card {
-            border-left: 3px solid;
-            transition: all 0.3s;
-        }
-        .prediction-card:hover {
-            background: rgba(255,255,255,0.08);
-        }
-        
         .ticker {
             animation: ticker 40s linear infinite;
             white-space: nowrap;
@@ -102,7 +91,6 @@
     </style>
 </head>
 <body class="min-h-screen">
-    <!-- Live Ticker -->
     <div class="bg-red-900/30 border-b border-red-500/30 overflow-hidden py-2">
         <div class="ticker flex gap-8 text-sm mono text-red-300">
             <span>🔴 LIVE WAR TRACKING</span>
@@ -113,13 +101,9 @@
             <span id="ticker-crisis">Crisis Risk: -%</span>
             <span>Next Update: Auto</span>
             <span>🔴 LIVE WAR TRACKING</span>
-            <span id="ticker-intensity-2">Intensity: -/10</span>
-            <span id="ticker-alert-2">Alert: -</span>
-            <span id="ticker-dominant-2">Dominant: -</span>
         </div>
     </div>
 
-    <!-- Header -->
     <header class="p-6 border-b border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -140,25 +124,18 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
         
-        <!-- Alert Banner -->
-        <div id="alert-banner" class="hidden rounded-xl p-4 text-center font-bold text-lg crisis-alert">
-            <!-- Dynamic alert -->
-        </div>
+        <div id="alert-banner" class="hidden rounded-xl p-4 text-center font-bold text-lg crisis-alert"></div>
 
-        <!-- War Map -->
         <div class="glass rounded-xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold">🗺️ Live Battlefield Map</h2>
                 <span class="text-xs text-gray-500">Click players for details</span>
             </div>
             <div class="war-map" id="battlefield">
-                <!-- Attack lines container -->
                 <div id="attack-lines"></div>
                 
-                <!-- Center: Anura -->
                 <div class="player-node bg-green-900/80 border-green-500 text-green-400" 
                      style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                      onclick="showPlayerDetails('anura')">
@@ -167,7 +144,6 @@
                     <div class="text-[10px] mt-1 font-mono" id="anura-map-stat">Gap: -</div>
                 </div>
                 
-                <!-- Top: Dilith -->
                 <div class="player-node bg-red-900/80 border-red-500 text-red-400" 
                      style="top: 8%; left: 50%; transform: translateX(-50%);"
                      onclick="showPlayerDetails('dilith')">
@@ -176,7 +152,6 @@
                     <div class="text-[10px] mt-1 font-mono" id="dilith-map-stat">Mom: -%</div>
                 </div>
                 
-                <!-- Left: Sajith -->
                 <div class="player-node bg-yellow-900/80 border-yellow-500 text-yellow-400" 
                      style="top: 50%; left: 8%; transform: translateY(-50%);"
                      onclick="showPlayerDetails('sajith')">
@@ -185,7 +160,6 @@
                     <div class="text-[10px] mt-1 font-mono" id="sajith-map-stat">Share: -%</div>
                 </div>
                 
-                <!-- Right: Namal -->
                 <div class="player-node bg-blue-900/80 border-blue-500 text-blue-400" 
                      style="top: 50%; right: 8%; transform: translateY(-50%);"
                      onclick="showPlayerDetails('namal')">
@@ -194,18 +168,16 @@
                     <div class="text-[10px] mt-1 font-mono" id="namal-map-stat">Trend: -</div>
                 </div>
                 
-                <!-- Bottom: Ranil -->
                 <div class="player-node bg-purple-900/80 border-purple-500 text-purple-400" 
                      style="bottom: 8%; left: 50%; transform: translateX(-50%);"
                      onclick="showPlayerDetails('ranil')">
                     <div>RANIL</div>
-                    <div class="text-[10px] opacity-75">UNP | JAILED</div>
+                    <div class="text-[10px] opacity-75">UNP | Veteran</div>
                     <div class="text-[10px] mt-1 font-mono" id="ranil-map-stat">Fear: -</div>
                 </div>
             </div>
         </div>
 
-        <!-- Critical Metrics Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="glass rounded-xl p-4 metric-card">
                 <div class="text-gray-400 text-xs mb-1">War Intensity</div>
@@ -244,68 +216,13 @@
             </div>
         </div>
 
-        <!-- 5 Player Cards -->
-        <div>
-            <h3 class="text-lg font-bold mb-4 text-gray-300">🎭 Player Status</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" id="player-cards">
-                <!-- Filled by JS -->
-            </div>
-        </div>
-
-        <!-- Two Column: AI Predictions & War Dynamics -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- AI Predictions -->
-            <div class="glass rounded-xl p-6">
-                <h3 class="text-lg font-bold mb-4 text-purple-400 flex items-center gap-2">
-                    🔮 AI Predictions (48h)
-                    <span class="text-xs text-gray-500 font-normal">Neural analysis</span>
-                </h3>
-                <div id="predictions-list" class="space-y-3">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-            
-            <!-- War Dynamics -->
-            <div class="glass rounded-xl p-6">
-                <h3 class="text-lg font-bold mb-4 text-red-400 flex items-center gap-2">
-                    ⚔️ War Dynamics
-                    <span class="text-xs text-gray-500 font-normal">Attack patterns</span>
-                </h3>
-                <div id="dynamics-list" class="space-y-3">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Fear Levels & Gap Scores -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- Fear Monitor -->
-            <div class="glass rounded-xl p-6">
-                <h3 class="text-lg font-bold mb-4 text-pink-400">😰 Fear/Stress Monitor</h3>
-                <div id="fear-list" class="space-y-3">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-            
-            <!-- Gap Scores -->
-            <div class="glass rounded-xl p-6">
-                <h3 class="text-lg font-bold mb-4 text-orange-400">📊 Expectation Gap Scores</h3>
-                <div id="gap-list" class="space-y-3">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="glass rounded-xl p-4">
                 <h4 class="text-sm font-bold mb-3 text-gray-400">Media Share Battle</h4>
                 <canvas id="mediaChart" height="200"></canvas>
             </div>
             <div class="glass rounded-xl p-4">
-                <h4 class="text-sm font-bold mb-3 text-gray-400">Sentiment Trends</h4>
+                <h4 class="text-sm font-bold mb-3 text-gray-400">Political Stability Trend (History)</h4>
                 <canvas id="sentimentChart" height="200"></canvas>
             </div>
             <div class="glass rounded-xl p-4">
@@ -314,37 +231,28 @@
             </div>
         </div>
 
-        <!-- Latest Headlines -->
         <div class="glass rounded-xl p-6">
             <h3 class="text-lg font-bold mb-4 text-gray-300">📰 Latest Intelligence</h3>
-            <div id="headlines-list" class="space-y-2 max-h-96 overflow-y-auto">
-                <!-- Filled by JS -->
-            </div>
-        </div>
-
-        <!-- Metadata -->
-        <div class="text-center text-xs text-gray-600 mono">
-            <p>Data sources: Aruna.lk, AdaDerana (Si/En), NewsFirst, News19 | AI Model: v2.0 | Updates: Every 6h</p>
-            <p>Generated: <span id="generated-time">-</span> | Scraped articles: <span id="article-count">-</span></p>
+            <div id="headlines-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
         </div>
     </main>
 
-    <!-- Player Detail Modal -->
     <div id="player-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
         <div class="glass rounded-xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-start mb-4">
                 <h2 id="modal-title" class="text-2xl font-bold">Player Details</h2>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
             </div>
-            <div id="modal-content">
-                <!-- Dynamic content -->
-            </div>
+            <div id="modal-content"></div>
         </div>
     </div>
 
     <script>
-        // Configuration
-        const DATA_URL = 'https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker2/main/data/political_data.json';
+        // CONFIGURATION - CHANGE YOUR USERNAME HERE IF NEEDED
+        const BASE_URL = 'https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker2/main/data/';
+        const DATA_URL = BASE_URL + 'political_data.json';
+        const HISTORY_URL = BASE_URL + 'history.json';
+
         const PLAYER_COLORS = {
             anura: { text: 'text-green-400', bg: 'bg-green-600', border: 'border-green-500', hex: '#22c55e' },
             dilith: { text: 'text-red-400', bg: 'bg-red-600', border: 'border-red-500', hex: '#ef4444' },
@@ -352,6 +260,7 @@
             namal: { text: 'text-blue-400', bg: 'bg-blue-600', border: 'border-blue-500', hex: '#3b82f6' },
             ranil: { text: 'text-purple-400', bg: 'bg-purple-600', border: 'border-purple-500', hex: '#a855f7' }
         };
+
         const PLAYER_NAMES = {
             anura: 'Anura Kumara', dilith: 'Dilith Jayaweera',
             sajith: 'Sajith Premadasa', namal: 'Namal Rajapaksa', ranil: 'Ranil Wickremesinghe'
@@ -360,16 +269,24 @@
         let currentData = null;
         let charts = {};
 
-        // Load data
         async function loadData() {
             try {
+                // Fetch Live Data
                 const response = await fetch(DATA_URL + '?t=' + Date.now());
+                if (!response.ok) throw new Error("Data file not found");
                 const data = await response.json();
                 currentData = data;
                 updateDashboard(data);
+
+                // Fetch History Data
+                const histResponse = await fetch(HISTORY_URL + '?t=' + Date.now());
+                if (histResponse.ok) {
+                    const history = await histResponse.json();
+                    updateHistoryChart(history);
+                }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('last-update').textContent = 'Error loading data';
+                document.getElementById('last-update').textContent = 'Syncing...';
             }
         }
 
@@ -378,288 +295,95 @@
             const stats = data.player_stats;
             const predictions = data.ai_predictions;
             
-            // Update header
             document.getElementById('last-update').textContent = new Date(data.metadata.generated_at).toLocaleString();
-            document.getElementById('generated-time').textContent = new Date(data.metadata.generated_at).toLocaleString();
-            document.getElementById('article-count').textContent = data.metadata.unique_articles;
             
-            // Update ticker
+            // Ticker
             document.getElementById('ticker-intensity').textContent = `Intensity: ${warStatus.intensity}/10`;
-            document.getElementById('ticker-intensity-2').textContent = `Intensity: ${warStatus.intensity}/10`;
             document.getElementById('ticker-alert').textContent = `Alert: ${warStatus.alert_status}`;
-            document.getElementById('ticker-alert-2').textContent = `Alert: ${warStatus.alert_status}`;
-            document.getElementById('ticker-dominant').textContent = `Dominant: ${warStatus.dominant_player.toUpperCase()}`;
-            document.getElementById('ticker-dominant-2').textContent = `Dominant: ${warStatus.dominant_player.toUpperCase()}`;
+            document.getElementById('ticker-dominant').textContent = `Dominant: ${warStatus.dominant_player}`;
             
-            const avgGap = (Object.values(data.gap_scores).reduce((a,b) => a+b, 0) / 5).toFixed(1);
-            document.getElementById('ticker-gap').textContent = `Avg Gap: ${avgGap}`;
-            document.getElementById('ticker-crisis').textContent = `Crisis Risk: ${predictions.crisis_risk?.probability || 0}%`;
-            
-            // Alert banner
-            const alertBanner = document.getElementById('alert-banner');
-            if (warStatus.alert_status === 'RED') {
-                alertBanner.className = 'bg-red-900/50 border border-red-500 text-red-200 rounded-xl p-4 text-center font-bold text-lg crisis-alert';
-                alertBanner.innerHTML = `🔴 RED ALERT: Critical instability | ${predictions.crisis_risk?.triggers?.[0] || 'Multiple triggers'}`;
-                alertBanner.classList.remove('hidden');
-            } else if (warStatus.alert_status === 'ORANGE') {
-                alertBanner.className = 'bg-orange-900/50 border border-orange-500 text-orange-200 rounded-xl p-4 text-center font-bold';
-                alertBanner.innerHTML = `🟠 ORANGE ALERT: High tension | Watch for ${predictions.crisis_risk?.triggers?.[0] || 'flashpoints'}`;
-                alertBanner.classList.remove('hidden');
-            }
-            
-            // Critical metrics
-            document.getElementById('war-intensity').textContent = warStatus.intensity.toFixed(1);
-            document.getElementById('crisis-level').textContent = warStatus.crisis_level;
+            // Map Stats
+            Object.keys(PLAYER_NAMES).forEach(p => {
+                const el = document.getElementById(p + '-map-stat');
+                if(el && stats[p]) el.textContent = `Media: ${stats[p].media_share}%`;
+            });
+
+            // Metrics
+            document.getElementById('war-intensity').textContent = warStatus.intensity;
             document.getElementById('intensity-bar').style.width = (warStatus.intensity * 10) + '%';
             
+            const avgGap = (Object.values(data.gap_scores).reduce((a,b)=>a+b,0)/5).toFixed(1);
             document.getElementById('avg-gap').textContent = avgGap;
             document.getElementById('avg-gap-bar').style.width = (avgGap * 10) + '%';
-            
-            const crisisProb = predictions.crisis_risk?.probability || 0;
-            document.getElementById('crisis-prob').textContent = crisisProb + '%';
-            document.getElementById('crisis-timeline').textContent = predictions.crisis_risk?.timeline || '-';
-            document.getElementById('crisis-bar').style.width = crisisProb + '%';
-            
-            const coalProb = (predictions.coalition?.formation_probability || 0) * 100;
-            document.getElementById('coalition-chance').textContent = coalProb.toFixed(0) + '%';
-            document.getElementById('coalition-leader').textContent = 'Leader: ' + (predictions.coalition?.likely_leader || '-').toUpperCase();
-            document.getElementById('coalition-bar').style.width = coalProb + '%';
-            
-            // Update map stats
-            for (const player of Object.keys(PLAYER_NAMES)) {
-                const el = document.getElementById(player + '-map-stat');
-                if (el && data.gap_scores[player] !== undefined) {
-                    if (player === 'anura') el.textContent = `Gap: ${data.gap_scores[player]}`;
-                    else if (player === 'dilith') el.textContent = `Mom: ${stats[player].media_share}%`;
-                    else if (player === 'sajith') el.textContent = `Share: ${stats[player].media_share}%`;
-                    else if (player === 'namal') el.textContent = `Trend: ${stats[player].sentiment_score > 0 ? '↑' : stats[player].sentiment_score < 0 ? '↓' : '→'}`;
-                    else if (player === 'ranil') el.textContent = `Fear: ${data.fear_levels[player]}`;
-                }
-            }
-            
-            // Player cards
-            updatePlayerCards(stats, data.gap_scores, data.fear_levels);
-            
-            // Predictions
-            updatePredictions(predictions);
-            
-            // Dynamics
-            updateDynamics(data.war_dynamics, stats);
-            
-            // Fear & Gap
-            updateFearLevels(data.fear_levels, stats);
-            updateGapScores(data.gap_scores, stats);
-            
+
+            document.getElementById('crisis-prob').textContent = predictions.crisis_risk.probability + '%';
+            document.getElementById('crisis-bar').style.width = predictions.crisis_risk.probability + '%';
+            document.getElementById('crisis-timeline').textContent = predictions.crisis_risk.timeline;
+
+            document.getElementById('coalition-chance').textContent = (predictions.coalition.formation_probability * 100).toFixed(0) + '%';
+            document.getElementById('coalition-leader').textContent = predictions.coalition.likely_leader;
+            document.getElementById('coalition-bar').style.width = (predictions.coalition.formation_probability * 100) + '%';
+
             // Headlines
-            updateHeadlines(data.recent_headlines);
-            
-            // Charts
-            updateCharts(stats);
+            const hContainer = document.getElementById('headlines-list');
+            hContainer.innerHTML = data.recent_headlines.map(h => `
+                <div class="p-3 bg-gray-800/30 rounded-lg border-l-2 ${h.sentiment==='positive'?'border-green-500':h.sentiment==='negative'?'border-red-500':'border-gray-500'}">
+                    <div class="text-sm text-gray-200">${h.title}</div>
+                    <div class="text-xs text-gray-500 mt-1">${h.source} | ${h.sentiment.toUpperCase()}</div>
+                </div>
+            `).join('');
+
+            // Draw Charts
+            updateCharts(stats, data.war_dynamics);
         }
 
-        function updatePlayerCards(stats, gapScores, fearLevels) {
-            const container = document.getElementById('player-cards');
-            container.innerHTML = '';
-            
-            Object.entries(PLAYER_NAMES).forEach(([player, name]) => {
-                const s = stats[player];
-                const colors = PLAYER_COLORS[player];
-                const trendEmoji = s.sentiment_score > 0.1 ? '📈' : s.sentiment_score < -0.1 ? '📉' : '➡️';
-                const postureEmoji = s.attack_ratio > 0.3 ? '⚔️' : s.defense_ratio > 0.3 ? '🛡️' : '⚪';
-                
-                const card = document.createElement('div');
-                card.className = `glass rounded-xl p-4 border-2 ${colors.border} cursor-pointer hover:bg-white/5 transition-all`;
-                card.onclick = () => showPlayerDetails(player);
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold ${colors.text} text-sm">${name}</span>
-                        <span class="text-lg">${postureEmoji}</span>
-                    </div>
-                    <div class="text-xs text-gray-500 mb-3">${player.toUpperCase()} | ${s.mentions} mentions</div>
-                    
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Media</span>
-                            <span class="font-bold">${s.media_share}%</span>
-                        </div>
-                        <div class="w-full bg-gray-800 h-2 rounded">
-                            <div class="${colors.bg} h-2 rounded" style="width: ${s.media_share}%"></div>
-                        </div>
-                        
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Sentiment</span>
-                            <span class="${s.sentiment_score > 0 ? 'text-green-400' : s.sentiment_score < 0 ? 'text-red-400' : 'text-gray-400'}">
-                                ${s.sentiment_score > 0 ? '+' : ''}${s.sentiment_score.toFixed(2)}
-                            </span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-gray-700 text-xs">
-                            <div class="text-center">
-                                <div class="text-gray-500">Gap</div>
-                                <div class="font-bold text-orange-400">${gapScores[player]}</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-gray-500">Fear</div>
-                                <div class="font-bold text-pink-400">${fearLevels[player]}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-xs text-gray-400">Trend ${trendEmoji}</span>
-                            <span class="text-xs ${s.attack_ratio > 0.3 ? 'text-red-400' : s.defense_ratio > 0.3 ? 'text-blue-400' : 'text-gray-400'}">
-                                ${s.attack_ratio > 0.3 ? 'Attacking' : s.defense_ratio > 0.3 ? 'Defending' : 'Neutral'}
-                            </span>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
+        function updateHistoryChart(history) {
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            if (charts.history) charts.history.destroy();
+
+            charts.history = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: history.map(h => h.date),
+                    datasets: [{
+                        label: 'Intensity Trend',
+                        data: history.map(h => h.intensity),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Gap Score',
+                        data: history.map(h => h.gap_score),
+                        borderColor: '#f97316',
+                        borderDash: [5,5],
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { labels: { color: '#9ca3af' } } },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        x: { ticks: { color: '#9ca3af', maxTicksLimit: 5 }, grid: { display: false } }
+                    }
+                }
             });
         }
 
-        function updatePredictions(predictions) {
-            const container = document.getElementById('predictions-list');
-            container.innerHTML = '';
-            
-            Object.entries(predictions).forEach(([player, pred]) => {
-                if (!pred.move) return;
-                const colors = PLAYER_COLORS[player] || { text: 'text-gray-400', border: 'border-gray-500' };
-                
-                container.innerHTML += `
-                    <div class="prediction-card p-3 bg-gray-800/50 rounded-lg ${colors.border}">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="font-bold ${colors.text}">${player.toUpperCase()}</span>
-                            <span class="text-xs text-gray-500">${(pred.confidence * 100).toFixed(0)}% confidence</span>
-                        </div>
-                        <p class="text-sm text-gray-300 mb-1">${pred.move}</p>
-                        <div class="flex justify-between text-xs text-gray-500">
-                            <span>⏱️ ${pred.timing}</span>
-                            <span>📊 ${pred.expected_outcome?.substring(0, 30) || 'Outcome TBD'}...</span>
-                        </div>
-                        ${pred.trigger ? `<div class="text-xs text-gray-600 mt-1">Trigger: ${pred.trigger}</div>` : ''}
-                    </div>
-                `;
-            });
-        }
-
-        function updateDynamics(dynamics, stats) {
-            const container = document.getElementById('dynamics-list');
-            container.innerHTML = '';
-            
-            // Find top attacks
-            let attacks = [];
-            Object.entries(dynamics).forEach(([attacker, targets]) => {
-                Object.entries(targets).forEach(([target, count]) => {
-                    if (count > 0) attacks.push({attacker, target, count});
-                });
-            });
-            
-            attacks.sort((a, b) => b.count - a.count);
-            
-            if (attacks.length === 0) {
-                container.innerHTML = '<div class="text-gray-500 text-center">No direct attacks detected</div>';
-                return;
-            }
-            
-            attacks.slice(0, 5).forEach(attack => {
-                const attackerColor = PLAYER_COLORS[attack.attacker];
-                const targetColor = PLAYER_COLORS[attack.target];
-                
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold ${attackerColor.text}">${attack.attacker.toUpperCase()}</span>
-                            <span class="text-red-400">→ attacks →</span>
-                            <span class="font-bold ${targetColor.text}">${attack.target.toUpperCase()}</span>
-                        </div>
-                        <span class="text-xs bg-red-900/50 text-red-400 px-2 py-1 rounded">${attack.count}x</span>
-                    </div>
-                `;
-            });
-        }
-
-        function updateFearLevels(fearLevels, stats) {
-            const container = document.getElementById('fear-list');
-            container.innerHTML = '';
-            
-            Object.entries(fearLevels).sort((a, b) => b[1] - a[1]).forEach(([player, fear]) => {
-                const colors = PLAYER_COLORS[player];
-                const barColor = fear > 0.7 ? 'bg-red-500' : fear > 0.5 ? 'bg-orange-500' : fear > 0.3 ? 'bg-yellow-500' : 'bg-green-500';
-                
-                container.innerHTML += `
-                    <div class="flex items-center gap-3">
-                        <span class="w-20 font-bold ${colors.text} text-sm">${player.toUpperCase()}</span>
-                        <div class="flex-1 bg-gray-800 h-3 rounded-full overflow-hidden">
-                            <div class="${barColor} h-full rounded-full transition-all duration-1000" style="width: ${fear * 100}%"></div>
-                        </div>
-                        <span class="w-12 text-right font-mono text-sm">${fear.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function updateGapScores(gapScores, stats) {
-            const container = document.getElementById('gap-list');
-            container.innerHTML = '';
-            
-            Object.entries(gapScores).sort((a, b) => b[1] - a[1]).forEach(([player, gap]) => {
-                const colors = PLAYER_COLORS[player];
-                const barColor = gap > 7 ? 'bg-red-500' : gap > 5 ? 'bg-orange-500' : gap > 3 ? 'bg-yellow-500' : 'bg-green-500';
-                
-                container.innerHTML += `
-                    <div class="flex items-center gap-3">
-                        <span class="w-20 font-bold ${colors.text} text-sm">${player.toUpperCase()}</span>
-                        <div class="flex-1 bg-gray-800 h-3 rounded-full overflow-hidden">
-                            <div class="${barColor} h-full rounded-full transition-all duration-1000" style="width: ${(gap / 10) * 100}%"></div>
-                        </div>
-                        <span class="w-12 text-right font-mono text-sm">${gap.toFixed(1)}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function updateHeadlines(headlines) {
-            const container = document.getElementById('headlines-list');
-            container.innerHTML = headlines.slice(0, 15).map(h => {
-                const flag = h.language === 'si' ? '🇱🇰' : '🇬🇧';
-                const mentionedPlayers = Object.entries(h.mentions || {})
-                    .filter(([_, v]) => v)
-                    .map(([p, _]) => `<span class="text-xs ${PLAYER_COLORS[p]?.text || 'text-gray-400'}">${p}</span>`)
-                    .join(' ');
-                
-                return `
-                    <div class="p-3 bg-gray-800/30 rounded-lg border-l-2 ${h.sentiment === 'positive' ? 'border-green-500' : h.sentiment === 'negative' ? 'border-red-500' : 'border-gray-500'}">
-                        <div class="flex items-start gap-2">
-                            <span class="text-lg">${flag}</span>
-                            <div class="flex-1">
-                                <div class="text-sm text-gray-200">${h.title}</div>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-xs text-gray-500">${h.source}</span>
-                                    <span class="text-xs ${h.sentiment === 'positive' ? 'text-green-400' : h.sentiment === 'negative' ? 'text-red-400' : 'text-gray-400'}">
-                                        ${h.sentiment}
-                                    </span>
-                                    ${mentionedPlayers ? `<div class="flex gap-1">${mentionedPlayers}</div>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function updateCharts(stats) {
+        function updateCharts(stats, dynamics) {
             const players = Object.keys(PLAYER_NAMES);
-            
-            // Destroy old charts
-            Object.values(charts).forEach(c => c.destroy());
-            
-            // Media Share
+
+            // 1. Media Share (Doughnut)
+            if (charts.media) charts.media.destroy();
             charts.media = new Chart(document.getElementById('mediaChart'), {
                 type: 'doughnut',
                 data: {
                     labels: players.map(p => p.toUpperCase()),
                     datasets: [{
                         data: players.map(p => stats[p].media_share),
-                        backgroundColor: players.map(p => PLAYER_COLORS[p].hex)
+                        backgroundColor: players.map(p => PLAYER_COLORS[p].hex),
+                        borderWidth: 0
                     }]
                 },
                 options: {
@@ -667,144 +391,121 @@
                     plugins: { legend: { position: 'right', labels: { color: '#9ca3af', font: { size: 10 } } } }
                 }
             });
-            
-            // Sentiment
-            charts.sentiment = new Chart(document.getElementById('sentimentChart'), {
-                type: 'bar',
+
+            // 2. Posture (Radar)
+            if (charts.posture) charts.posture.destroy();
+            charts.posture = new Chart(document.getElementById('postureChart'), {
+                type: 'radar',
                 data: {
                     labels: players.map(p => p.toUpperCase()),
                     datasets: [{
-                        label: 'Sentiment',
-                        data: players.map(p => stats[p].sentiment_score),
-                        backgroundColor: players.map(p => stats[p].sentiment_score > 0 ? '#22c55e' : stats[p].sentiment_score < 0 ? '#ef4444' : '#6b7280')
+                        label: 'Attack',
+                        data: players.map(p => stats[p].attack_ratio * 100),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)'
+                    }, {
+                        label: 'Defense',
+                        data: players.map(p => stats[p].defense_ratio * 100),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)'
                     }]
                 },
                 options: {
                     responsive: true,
                     scales: {
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
-                        x: { ticks: { color: '#9ca3af' }, grid: { display: false } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-            
-            // Posture
-            charts.posture = new Chart(document.getElementById('postureChart'), {
-                type: 'radar',
-                data: {
-                    labels: players.map(p => p.toUpperCase()),
-                    datasets: [
-                        {
-                            label: 'Attack',
-                            data: players.map(p => stats[p].attack_ratio * 100),
-                            borderColor: '#ef4444',
-                            backgroundColor: 'rgba(239, 68, 68, 0.2)'
-                        },
-                        {
-                            label: 'Defense',
-                            data: players.map(p => stats[p].defense_ratio * 100),
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.2)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        r: {
-                            ticks: { color: '#9ca3af', backdropColor: 'transparent' },
+                        r: { 
+                            ticks: { display: false }, 
                             grid: { color: '#374151' },
                             pointLabels: { color: '#9ca3af', font: { size: 10 } }
                         }
                     }
                 }
             });
+
+            // Draw Attack Lines
+            drawAttackLines(dynamics);
         }
 
-        // Modal functions
+        function drawAttackLines(dynamics) {
+            const container = document.getElementById('attack-lines');
+            container.innerHTML = ''; 
+            const positions = {
+                anura:  {x: 50, y: 50}, dilith: {x: 50, y: 15},
+                sajith: {x: 15, y: 50}, namal:  {x: 85, y: 50},
+                ranil:  {x: 50, y: 85}
+            };
+
+            Object.entries(dynamics).forEach(([attacker, targets]) => {
+                Object.entries(targets).forEach(([target, count]) => {
+                    if (count > 0 && positions[attacker] && positions[target]) {
+                        const p1 = positions[attacker];
+                        const p2 = positions[target];
+                        const deltaX = p2.x - p1.x;
+                        const deltaY = p2.y - p1.y;
+                        const length = Math.sqrt(deltaX**2 + deltaY**2);
+                        const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                        
+                        const line = document.createElement('div');
+                        line.className = 'attack-line';
+                        line.style.width = `${length}%`;
+                        line.style.left = `${p1.x}%`;
+                        line.style.top = `${p1.y}%`;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        container.appendChild(line);
+                    }
+                });
+            });
+        }
+
+        // Modal Logic
         function showPlayerDetails(player) {
-            if (!currentData) return;
-            
+            if(!currentData) return;
             const modal = document.getElementById('player-modal');
-            const title = document.getElementById('modal-title');
             const content = document.getElementById('modal-content');
-            const colors = PLAYER_COLORS[player];
             const stats = currentData.player_stats[player];
-            
-            title.innerHTML = `<span class="${colors.text}">${PLAYER_NAMES[player]}</span>`;
-            title.className = `text-2xl font-bold ${colors.text}`;
-            
-            const headlines = stats.headlines.slice(0, 5).map(h => 
-                `<li class="text-sm text-gray-300 mb-1">• ${h.title.substring(0, 80)}${h.title.length > 80 ? '...' : ''}</li>`
-            ).join('');
-            
+            const pred = currentData.ai_predictions[player];
+            const colors = PLAYER_COLORS[player];
+
             content.innerHTML = `
-                <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-800/50 p-3 rounded">
-                            <div class="text-xs text-gray-500">Media Share</div>
-                            <div class="text-xl font-bold ${colors.text}">${stats.media_share}%</div>
-                        </div>
-                        <div class="bg-gray-800/50 p-3 rounded">
-                            <div class="text-xs text-gray-500">Sentiment</div>
-                            <div class="text-xl font-bold ${stats.sentiment_score > 0 ? 'text-green-400' : stats.sentiment_score < 0 ? 'text-red-400' : 'text-gray-400'}">
-                                ${stats.sentiment_score > 0 ? '+' : ''}${stats.sentiment_score}
-                            </div>
-                        </div>
-                        <div class="bg-gray-800/50 p-3 rounded">
-                            <div class="text-xs text-gray-500">Gap Score</div>
-                            <div class="text-xl font-bold text-orange-400">${currentData.gap_scores[player]}</div>
-                        </div>
-                        <div class="bg-gray-800/50 p-3 rounded">
-                            <div class="text-xs text-gray-500">Fear Level</div>
-                            <div class="text-xl font-bold text-pink-400">${currentData.fear_levels[player]}</div>
-                        </div>
+                <div class="text-center mb-4">
+                    <div class="text-3xl font-bold ${colors.text}">${PLAYER_NAMES[player]}</div>
+                    <div class="text-sm text-gray-500">Media Share: ${stats.media_share}%</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gray-800 p-3 rounded text-center">
+                        <div class="text-xs text-gray-500">Attack Ratio</div>
+                        <div class="font-bold text-red-400">${(stats.attack_ratio*100).toFixed(0)}%</div>
                     </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-gray-300 mb-2">Recent Headlines (${stats.mentions} total)</h4>
-                        <ul class="space-y-1 max-h-40 overflow-y-auto">
-                            ${headlines || '<li class="text-gray-500">No headlines</li>'}
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-gray-800/30 p-3 rounded">
-                        <div class="text-xs text-gray-500 mb-1">AI Prediction</div>
-                        <div class="text-sm text-gray-200">${currentData.ai_predictions[player]?.move || 'No prediction available'}</div>
+                    <div class="bg-gray-800 p-3 rounded text-center">
+                        <div class="text-xs text-gray-500">Defense Ratio</div>
+                        <div class="font-bold text-blue-400">${(stats.defense_ratio*100).toFixed(0)}%</div>
                     </div>
                 </div>
+                <div class="bg-gray-800/50 p-3 rounded border border-gray-700">
+                    <div class="text-xs text-purple-400 mb-1">AI PREDICTION (48H)</div>
+                    <div class="text-sm">${pred.move}</div>
+                    <div class="text-xs text-gray-500 mt-2 text-right">Confidence: ${(pred.confidence*100).toFixed(0)}%</div>
+                </div>
             `;
-            
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
-
         function closeModal() {
-            const modal = document.getElementById('player-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            document.getElementById('player-modal').classList.add('hidden');
+            document.getElementById('player-modal').classList.remove('flex');
         }
 
-        // Close modal on outside click
-        document.getElementById('player-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'player-modal') closeModal();
-        });
-
-        // Countdown timer
-        let countdown = 300;
-        setInterval(() => {
-            countdown--;
-            if (countdown <= 0) {
-                countdown = 300;
-                loadData();
-            }
-            document.getElementById('countdown').textContent = countdown + 's';
-        }, 1000);
-
-        // Initial load
+        // Init
         loadData();
-        setInterval(loadData, 300000); // 5 minutes
+        setInterval(loadData, 60000); // Check every minute
+        
+        // Countdown
+        let count = 60;
+        setInterval(() => {
+            count--;
+            if(count<=0) count=60;
+            document.getElementById('countdown').textContent = count + 's';
+        }, 1000);
     </script>
 </body>
 </html>
