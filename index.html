@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sri Lanka Political Tracker</title>
+    <style>
+        body { font-family: Arial; background: #1a1a1a; color: white; padding: 20px; }
+        .box { background: #333; padding: 20px; margin: 10px 0; border-radius: 10px; }
+        h1 { color: #4CAF50; }
+        .live { color: #4CAF50; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <h1>🇱🇰 Sri Lanka Political War Tracker</h1>
+    <p><span class="live">●</span> Live Updates</p>
+    
+    <div class="box">
+        <h2>Latest News</h2>
+        <div id="news">Loading...</div>
+    </div>
+    
+    <div class="box">
+        <h2>Players</h2>
+        <p>🟢 Anura (President)</p>
+        <p>🔴 Dilith (Opposition)</p>
+        <p>🟡 Sajith (SJB)</p>
+        <p>🔵 Namal (SLPP)</p>
+        <p>🟣 Ranil (Jailed)</p>
+    </div>
+
+    <script>
+        // Load news from your GitHub
+        fetch('https://raw.githubusercontent.com/yoshi-675/sl-political-war-tracker/main/data/news.json')
+            .then(r => r.json())
+            .then(data => {
+                const html = data.map(item => `<p>• ${item.title}</p>`).join('');
+                document.getElementById('news').innerHTML = html || 'No news yet';
+            })
+            .catch(() => {
+                document.getElementById('news').innerHTML = 'Run scraper first';
+            });
+    </script>
+</body>
+</html>
